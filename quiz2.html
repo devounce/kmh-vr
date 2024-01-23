@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>クイズ2</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene>
+    <a-videosphere src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25-5.8.mp4" id="videoSphere"></a-videosphere>
+  </a-scene>
+
+  <script>
+    document.querySelector('#videoSphere').addEventListener('materialvideoended', function () {
+      document.body.innerHTML += `
+        <h1>クイズ2</h1>
+        <p>胸骨圧迫の際、質の評価に該当しないものは？</p>
+        <button onclick="submitAnswer('A')">A: 胸骨圧迫の速さ</button>
+        <button onclick="submitAnswer('B')">B: 胸骨圧迫交代のタイミング</button>
+        <button onclick="submitAnswer('C')">C: 圧迫した胸骨を毎回元に戻す</button>
+      `;
+    });
+    document.querySelector('#videoSphere').components.material.material.map.image.play();
+  </script>
+
+  <script src="quiz_logic.js"></script>
+</body>
+</html>
