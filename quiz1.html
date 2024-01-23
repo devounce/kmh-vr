@@ -11,8 +11,9 @@
       transform: translate(-50%, -50%);
       font-size: 2em;
       color: white;
+      display: none; /* 初期状態では非表示 */
     }
-    #quiz-container {
+    #quiz-container, #result-message {
       position: absolute;
       top: 0;
       left: 0;
@@ -24,6 +25,10 @@
       justify-content: center;
       display: none; /* 初期状態では非表示 */
     }
+    #result-message {
+      font-size: 3em;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -31,7 +36,7 @@
 
   <a-scene embedded vr-mode-ui="enabled: true" renderer="antialias: true">
     <a-assets>
-      <video id="vid" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
+      <video id="vid" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
     </a-assets>
 
     <a-videosphere src="#vid"></a-videosphere>
@@ -45,22 +50,47 @@
     <button onclick="submitAnswer('C')">C: アトロピン3mg</button>
   </div>
 
+  <div id="result-message"></div>
+
   <script>
     var videoEl = document.querySelector('#vid');
     var loadingEl = document.getElementById('loading');
     var quizContainer = document.getElementById('quiz-container');
+    var resultMessage = document.getElementById('result-message');
 
-    videoEl.onplaying = function() {
+    // Video loading
+    videoEl.onloadeddata = function() {
       loadingEl.style.display = 'none';
+      videoEl.play();
     };
 
+    // Video ended
     videoEl.onended = function() {
-      setTimeout(function() {
-        quizContainer.style.display = 'flex'; // flex to use the flexbox layout
-      }, 1000); // slight delay to ensure the video has finished
+      quizContainer.style.display = 'flex';
     };
+
+    // Submit answer
+    function submitAnswer(selectedAnswer) {
+      const correctAnswer = 'A';
+      if (selectedAnswer === correctAnswer) {
+        resultMessage.innerText = '正解！';
+        resultMessage.style.display = 'block';
+        // Redirect to the next video after a short delay
+        setTimeout(function() {
+          window.location.href = 'quiz2.html';
+        }, 2000);
+      } else {
+        resultMessage.innerText = '不正解...';
+        resultMessage.style.display = 'block';
+        // Replay the same video after a short delay
+        setTimeout(function() {
+          videoEl.play();
+          resultMessage.style.display = 'none';
+        }, 2000);
+      }
+    }
   </script>
 
-  <script src="quiz_logic.js"></script>
+  <!-- quiz_logic.js is not needed anymore since logic is handled inline -->
 </body>
 </html>
