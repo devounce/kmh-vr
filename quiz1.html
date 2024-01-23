@@ -7,10 +7,10 @@
 <body>
   <a-scene>
     <a-assets>
-      <video id="vid" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
+      <video id="vid" autoplay loop="false" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
     </a-assets>
 
-    <a-videosphere src="#vid" id="videoSphere"></a-videosphere>
+    <a-videosphere src="#vid"></a-videosphere>
   </a-scene>
 
   <div id="quiz-container" style="display:none;">
@@ -23,14 +23,8 @@
 
   <script>
     // 動画の再生が終了したらクイズを表示
-    document.querySelector('#videoSphere').addEventListener('materialvideoended', function () {
+    document.querySelector('#vid').addEventListener('ended', function () {
       document.getElementById('quiz-container').style.display = 'block';
-    });
-
-    // a-sceneが読み込まれたら動画を再生
-    document.querySelector('a-scene').addEventListener('loaded', function () {
-      var videoEl = document.querySelector('#vid');
-      videoEl.play();
     });
   </script>
 
