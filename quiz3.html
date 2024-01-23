@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>クイズ3</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene>
+    <a-videosphere src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25-5.8.mp4" id="videoSphere"></a-videosphere>
+  </a-scene>
+
+  <script>
+    document.querySelector('#videoSphere').addEventListener('materialvideoended', function () {
+      document.body.innerHTML += `
+        <h1>クイズ3</h1>
+        <p>モニター上asystoleを確認後に行うことは？</p>
+        <button onclick="submitAnswer('A')">A: リズムチェックを継続し、除細動を行う</button>
+        <button onclick="submitAnswer('B')">B: ノルアドレナリンの準備を行う</button>
+        <button onclick="submitAnswer('C')">C: 心肺蘇生法（CPR）を2分間実施する</button>
+      `;
+    });
+    document.querySelector('#videoSphere').components.material.material.map.image.play();
+  </script>
+
+  <script src="quiz_logic.js"></script>
+</body>
+</html>
