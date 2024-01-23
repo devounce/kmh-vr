@@ -4,7 +4,6 @@
   <title>クイズ1</title>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <style>
-    /* ローディングスタイル */
     #loading {
       position: absolute;
       top: 50%;
@@ -12,6 +11,17 @@
       transform: translate(-50%, -50%);
       font-size: 2em;
       color: white;
+    }
+    #quiz-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       display: none; /* 初期状態では非表示 */
     }
   </style>
@@ -19,15 +29,15 @@
 <body>
   <div id="loading">動画を読み込んでいます...</div>
 
-  <a-scene vr-mode-ui="enabled: false">
+  <a-scene embedded vr-mode-ui="enabled: true" renderer="antialias: true">
     <a-assets>
-      <video id="vid" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
+      <video id="vid" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
     </a-assets>
 
     <a-videosphere src="#vid"></a-videosphere>
   </a-scene>
 
-  <div id="quiz-container" style="display:none;">
+  <div id="quiz-container">
     <h1>クイズ1</h1>
     <p>アトロピンを準備したが、何mg投与した？</p>
     <button onclick="submitAnswer('A')">A: アトロピン1mg</button>
@@ -40,23 +50,15 @@
     var loadingEl = document.getElementById('loading');
     var quizContainer = document.getElementById('quiz-container');
 
-    // a-sceneが読み込まれたら動画を再生
-    document.querySelector('a-scene').addEventListener('loaded', function () {
-      loadingEl.style.display = 'block'; // ローディング表示
-      if (videoEl.readyState >= 2) {
-        videoEl.play();
-      } else {
-        videoEl.addEventListener('canplaythrough', function() {
-          loadingEl.style.display = 'none'; // ローディング非表示
-          videoEl.play();
-        });
-      }
-    });
+    videoEl.onplaying = function() {
+      loadingEl.style.display = 'none';
+    };
 
-    // 動画の再生が終了したらクイズを表示
-    videoEl.addEventListener('ended', function () {
-      quizContainer.style.display = 'block';
-    });
+    videoEl.onended = function() {
+      setTimeout(function() {
+        quizContainer.style.display = 'flex'; // flex to use the flexbox layout
+      }, 1000); // slight delay to ensure the video has finished
+    };
   </script>
 
   <script src="quiz_logic.js"></script>
