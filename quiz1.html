@@ -4,35 +4,19 @@
   <title>クイズ1</title>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <style>
-    #loading, #result-message {
+    #quiz-container {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 2em;
-      color: white;
       display: none; /* 初期状態では非表示 */
-    }
-    #quiz-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: none; /* 初期状態では非表示 */
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
     }
   </style>
 </head>
 <body>
-  <div id="loading">動画を読み込んでいます...</div>
-  <div id="result-message"></div>
-
-  <a-scene embedded vr-mode-ui="enabled: true" renderer="antialias: true">
+  <a-scene embedded>
     <a-assets>
-      <video id="vid" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4" crossorigin="anonymous"></video>
+      <video id="vid" autoplay loop="false" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4" crossorigin="anonymous"></video>
     </a-assets>
 
     <a-videosphere src="#vid"></a-videosphere>
@@ -48,32 +32,22 @@
 
   <script>
     var videoEl = document.querySelector('#vid');
-    var loadingEl = document.getElementById('loading');
-    var resultMessageEl = document.getElementById('result-message');
     var quizContainer = document.getElementById('quiz-container');
 
-    videoEl.onloadeddata = function() {
-      loadingEl.style.display = 'none'; // ローディング非表示
-    };
+    videoEl.addEventListener('ended', function() {
+      // 動画が終わったらクイズを表示
+      quizContainer.style.display = 'block';
+    });
 
-    videoEl.onended = function() {
-      quizContainer.style.display = 'flex'; // クイズ表示
-    };
-
-    function submitAnswer(selectedAnswer) {
-      var correctAnswer = 'A'; // 正解の答え
-      resultMessageEl.style.display = 'block'; // 結果メッセージ表示
-      if (selectedAnswer === correctAnswer) {
-        resultMessageEl.textContent = '正解！';
-        setTimeout(function() {
-          window.location.href = 'quiz2.html'; // 次のクイズへ移動
-        }, 2000);
+    function submitAnswer(answer) {
+      var correctAnswer = 'A'; // ここで正解を設定
+      if (answer === correctAnswer) {
+        // 正解の場合は次のクイズへ
+        window.location.href = 'quiz2.html';
       } else {
-        resultMessageEl.textContent = '不正解...';
-        setTimeout(function() {
-          videoEl.play(); // ビデオ再生再開
-          resultMessageEl.style.display = 'none'; // 結果メッセージ非表示
-        }, 2000);
+        // 不正解の場合は動画を再度再生
+        videoEl.currentTime = 0;
+        videoEl.play();
       }
     }
   </script>
