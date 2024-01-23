@@ -3,14 +3,27 @@
 <head>
   <title>クイズ1</title>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <style>
+    /* ローディングスタイル */
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2em;
+      color: white;
+    }
+  </style>
 </head>
 <body>
+  <div id="loading">動画を読み込んでいます...</div>
+
   <a-scene>
     <a-assets>
-      <video id="vid" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
+      <video id="vid" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
     </a-assets>
 
-    <a-videosphere src="#vid" id="videoSphere"></a-videosphere>
+    <a-videosphere src="#vid"></a-videosphere>
   </a-scene>
 
   <div id="quiz-container" style="display:none;">
@@ -22,15 +35,27 @@
   </div>
 
   <script>
-    // 動画の再生が終了したらクイズを表示
-    document.querySelector('#videoSphere').addEventListener('materialvideoended', function () {
-      document.getElementById('quiz-container').style.display = 'block';
+    var videoEl = document.querySelector('#vid');
+    var loadingEl = document.getElementById('loading');
+    var quizContainer = document.getElementById('quiz-container');
+
+    // 動画が十分に読み込まれたら再生を開始
+    videoEl.addEventListener('loadeddata', function() {
+      loadingEl.style.display = 'none'; // ローディング非表示
+      videoEl.play();
     });
 
-    // a-sceneが読み込まれたら動画を再生
+    // 動画の再生が終了したらクイズを表示
+    videoEl.addEventListener('ended', function () {
+      quizContainer.style.display = 'block';
+    });
+
+    // a-sceneが読み込まれたら動画の再生を試みる
     document.querySelector('a-scene').addEventListener('loaded', function () {
-      var videoEl = document.querySelector('#vid');
-      videoEl.play();
+      if (videoEl.readyState >= 2) {
+        loadingEl.style.display = 'none'; // ローディング非表示
+        videoEl.play();
+      }
     });
   </script>
 
