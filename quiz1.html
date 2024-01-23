@@ -12,13 +12,14 @@
       transform: translate(-50%, -50%);
       font-size: 2em;
       color: white;
+      display: none; /* 初期状態では非表示 */
     }
   </style>
 </head>
 <body>
   <div id="loading">動画を読み込んでいます...</div>
 
-  <a-scene>
+  <a-scene vr-mode-ui="enabled: false">
     <a-assets>
       <video id="vid" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4"></video>
     </a-assets>
@@ -39,23 +40,22 @@
     var loadingEl = document.getElementById('loading');
     var quizContainer = document.getElementById('quiz-container');
 
-    // 動画が十分に読み込まれたら再生を開始
-    videoEl.addEventListener('loadeddata', function() {
-      loadingEl.style.display = 'none'; // ローディング非表示
-      videoEl.play();
+    // a-sceneが読み込まれたら動画を再生
+    document.querySelector('a-scene').addEventListener('loaded', function () {
+      loadingEl.style.display = 'block'; // ローディング表示
+      if (videoEl.readyState >= 2) {
+        videoEl.play();
+      } else {
+        videoEl.addEventListener('canplaythrough', function() {
+          loadingEl.style.display = 'none'; // ローディング非表示
+          videoEl.play();
+        });
+      }
     });
 
     // 動画の再生が終了したらクイズを表示
     videoEl.addEventListener('ended', function () {
       quizContainer.style.display = 'block';
-    });
-
-    // a-sceneが読み込まれたら動画の再生を試みる
-    document.querySelector('a-scene').addEventListener('loaded', function () {
-      if (videoEl.readyState >= 2) {
-        loadingEl.style.display = 'none'; // ローディング非表示
-        videoEl.play();
-      }
     });
   </script>
 
