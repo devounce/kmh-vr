@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>クイズ1</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene>
+    <a-videosphere src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4" id="videoSphere"></a-videosphere>
+  </a-scene>
+
+  <script>
+    document.querySelector('#videoSphere').addEventListener('materialvideoended', function () {
+      document.body.innerHTML += `
+        <h1>クイズ1</h1>
+        <p>アトロピンを準備したが、何mg投与した？</p>
+        <button onclick="submitAnswer('A')">A: アトロピン1mg</button>
+        <button onclick="submitAnswer('B')">B: アトロピン2mg</button>
+        <button onclick="submitAnswer('C')">C: アトロピン3mg</button>
+      `;
+    });
+    document.querySelector('#videoSphere').components.material.material.map.image.play();
+  </script>
+
+  <script src="quiz_logic.js"></script>
+</body>
+</html>
