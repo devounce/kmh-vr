@@ -48,13 +48,12 @@
 
     #judgement {
       font-size: 1.5em; /* フォームのフォントサイズ */
-      color: #000; /* フォームのテキスト色 */
+      color: #FFF; /* フォームのテキスト色を白に変更 */
       margin-top: 20px; /* 選択肢との間隔 */
       display: none; /* 初期状態では非表示 */
     }
-
-    .correct { color: red; } /* 正解時の文字色 */
-    .incorrect { color: blue; } /* 不正解時の文字色 */
+    .correct { color: green; } /* 正解時の文字色を緑に変更 */
+    .incorrect { color: yellow; } /* 不正解時の文字色を黄色に変更 */
   </style>
 </head>
 <body>
@@ -91,16 +90,17 @@
       judgementEl.classList.remove('correct', 'incorrect'); // 以前のクラスを削除
 
       if (selectedAnswer === correctAnswer) {
-        judgementEl.textContent = '◯'; // 正解の記号を設定
+        judgementEl.textContent = '正解'; // 正解のテキストを設定
         judgementEl.classList.add('correct'); // 正解時のスタイルを適用
         setTimeout(function() {
           window.location.href = 'quiz2.html'; // 次のクイズへ
         }, 2000); // 2秒後に遷移
       } else {
-        judgementEl.textContent = '×'; // 不正解の記号を設定
+        judgementEl.textContent = '不正解'; // 不正解のテキストを設定
         judgementEl.classList.add('incorrect'); // 不正解時のスタイルを適用
         setTimeout(function() {
           judgementEl.style.display = 'none'; // 判定結果を非表示に
+          quizContainer.style.display = 'none'; // クイズコンテナを非表示に
           videoEl.currentTime = 0; // 動画を最初から再再生
           videoEl.play();
         }, 2000); // 2秒後に再再生
