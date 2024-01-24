@@ -65,6 +65,10 @@
     <a-videosphere src="#vid" id="videoSphere"></a-videosphere>
   </a-scene>
 
+  <button id="exit-vr-button" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
+    クイズ1を表示する
+  </button>
+
   <div id="quiz-container">
     <h1>クイズ1</h1>
     <p>アトロピンを準備したが、何mg投与した？</p>
@@ -82,6 +86,18 @@
 
     videoSphere.addEventListener('materialvideoended', function () {
       quizContainer.style.display = 'flex';
+    });
+
+    document.querySelector('a-scene').addEventListener('enter-vr', function () {
+      document.getElementById('exit-vr-button').style.display = 'block'; // VRモードに入ったらボタンを表示
+    });
+
+    document.querySelector('a-scene').addEventListener('exit-vr', function () {
+      document.getElementById('exit-vr-button').style.display = 'none'; // VRモードを終了したらボタンを非表示
+    });
+
+    document.getElementById('exit-vr-button').addEventListener('click', function () {
+      document.querySelector('a-scene').exitVR(); // VRモードを終了
     });
 
     function submitAnswer(selectedAnswer) {
