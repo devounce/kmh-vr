@@ -4,19 +4,6 @@
   <title>クイズ1</title>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <style>
-    #result-message {
-      position: fixed; /* absoluteからfixedに変更してページに固定 */
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2em;
-      color: white;
-      background: rgba(0, 0, 0, 0.8); /* 背景を暗くしてテキストを際立たせる */
-      padding: 1em;
-      border-radius: 5px;
-      display: none; /* 初期状態では非表示 */
-      z-index: 1000; /* 他の要素の上に表示されるようにz-indexを設定 */
-    }
     #quiz-container {
       position: absolute;
       top: 50%;
@@ -33,17 +20,17 @@
       align-items: center;
       justify-content: center;
     }
-  
+
     #quiz-container h1 {
       font-size: 2em; /* タイトルのフォントサイズ */
       margin-bottom: 10px; /* タイトルの下の余白 */
     }
-  
+
     #quiz-container p {
       font-size: 1.5em; /* パラグラフのフォントサイズ */
       margin-bottom: 20px; /* パラグラフの下の余白 */
     }
-  
+
     #quiz-container button {
       font-size: 1.2em; /* ボタンのフォントサイズ */
       color: #000; /* ボタンの文字色 */
@@ -54,11 +41,21 @@
       border-radius: 5px; /* ボタンの角の丸み */
       cursor: pointer; /* カーソルをポインターに */
     }
-  
+
     #quiz-container button:hover {
       background: #ddd; /* ホバー時の背景色 */
     }
-</style>
+
+    #judgement {
+      font-size: 1.5em; /* フォームのフォントサイズ */
+      color: #000; /* フォームのテキスト色 */
+      margin-top: 20px; /* 選択肢との間隔 */
+      display: none; /* 初期状態では非表示 */
+    }
+
+    .correct { color: red; } /* 正解時の文字色 */
+    .incorrect { color: blue; } /* 不正解時の文字色 */
+  </style>
 </head>
 <body>
   <a-scene>
@@ -69,21 +66,20 @@
     <a-videosphere src="#vid" id="videoSphere"></a-videosphere>
   </a-scene>
 
-  <div id="result-message"></div>
-
   <div id="quiz-container">
     <h1>クイズ1</h1>
     <p>アトロピンを準備したが、何mg投与した？</p>
     <button onclick="submitAnswer('A')">A: アトロピン1mg</button>
     <button onclick="submitAnswer('B')">B: アトロピン2mg</button>
     <button onclick="submitAnswer('C')">C: アトロピン3mg</button>
+    <div id="judgement"></div> <!-- 判定結果表示用のdiv -->
   </div>
 
   <script>
     var videoEl = document.querySelector('#vid');
     var videoSphere = document.querySelector('#videoSphere');
-    var resultMessageEl = document.getElementById('result-message');
     var quizContainer = document.getElementById('quiz-container');
+    var judgementEl = document.getElementById('judgement'); // 判定結果表示用のdivを取得
 
     videoSphere.addEventListener('materialvideoended', function () {
       quizContainer.style.display = 'flex';
@@ -91,16 +87,20 @@
 
     function submitAnswer(selectedAnswer) {
       var correctAnswer = 'A'; // 正解の答え
-      resultMessageEl.style.display = 'block'; // 結果メッセージを表示
+      judgementEl.style.display = 'block'; // 判定結果のdivを表示
+      judgementEl.classList.remove('correct', 'incorrect'); // 以前のクラスを削除
+
       if (selectedAnswer === correctAnswer) {
-        resultMessageEl.textContent = '正解！';
+        judgementEl.textContent = '◯'; // 正解の記号を設定
+        judgementEl.classList.add('correct'); // 正解時のスタイルを適用
         setTimeout(function() {
           window.location.href = 'quiz2.html'; // 次のクイズへ
         }, 2000); // 2秒後に遷移
       } else {
-        resultMessageEl.textContent = '不正解...';
+        judgementEl.textContent = '×'; // 不正解の記号を設定
+        judgementEl.classList.add('incorrect'); // 不正解時のスタイルを適用
         setTimeout(function() {
-          resultMessageEl.style.display = 'none'; // 結果メッセージを非表示
+          judgementEl.style.display = 'none'; // 判定結果を非表示に
           videoEl.currentTime = 0; // 動画を最初から再再生
           videoEl.play();
         }, 2000); // 2秒後に再再生
@@ -108,6 +108,7 @@
     }
   </script>
 
-  <script src="quiz_logic.js"></script>
+  <!-- quiz_logic.jsのスクリプト -->
+
 </body>
 </html>
