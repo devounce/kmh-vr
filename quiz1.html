@@ -4,23 +4,18 @@
   <title>クイズ1</title>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <style>
-    #startVideoBtn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2em;
-      padding: 0.5em 1em;
-      cursor: pointer;
-    }
     #result-message {
-      position: absolute;
+      position: fixed; /* absoluteからfixedに変更してページに固定 */
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 2em;
       color: white;
+      background: rgba(0, 0, 0, 0.8); /* 背景を暗くしてテキストを際立たせる */
+      padding: 1em;
+      border-radius: 5px;
       display: none; /* 初期状態では非表示 */
+      z-index: 1000; /* 他の要素の上に表示されるようにz-indexを設定 */
     }
     #quiz-container {
       position: absolute;
@@ -38,14 +33,17 @@
       align-items: center;
       justify-content: center;
     }
+  
     #quiz-container h1 {
       font-size: 2em; /* タイトルのフォントサイズ */
       margin-bottom: 10px; /* タイトルの下の余白 */
     }
+  
     #quiz-container p {
       font-size: 1.5em; /* パラグラフのフォントサイズ */
       margin-bottom: 20px; /* パラグラフの下の余白 */
     }
+  
     #quiz-container button {
       font-size: 1.2em; /* ボタンのフォントサイズ */
       color: #000; /* ボタンの文字色 */
@@ -56,19 +54,18 @@
       border-radius: 5px; /* ボタンの角の丸み */
       cursor: pointer; /* カーソルをポインターに */
     }
+  
     #quiz-container button:hover {
       background: #ddd; /* ホバー時の背景色 */
     }
-  </style>
+</style>
 </head>
 <body>
-  <!-- ビデオを再生するためのボタン -->
-  <button id="startVideoBtn">動画を再生する</button>
-  
   <a-scene>
     <a-assets>
-      <video id="vid" src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4" crossorigin="anonymous"></video>
+      <video id="vid" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25.mp4" crossorigin="anonymous"></video>
     </a-assets>
+
     <a-videosphere src="#vid" id="videoSphere"></a-videosphere>
   </a-scene>
 
@@ -83,36 +80,29 @@
   </div>
 
   <script>
-    document.getElementById('startVideoBtn').addEventListener('click', function() {
-      // ボタンを非表示にし、ビデオを再生します
-      this.style.display = 'none';
-      var videoEl = document.querySelector('#vid');
-      videoEl.play();
-    });
-
+    var videoEl = document.querySelector('#vid');
     var videoSphere = document.querySelector('#videoSphere');
     var resultMessageEl = document.getElementById('result-message');
     var quizContainer = document.getElementById('quiz-container');
 
-    videoSphere.addEventListener('materialvideoended', function() {
-      // 動画が終了したらクイズコンテナを表示
+    videoSphere.addEventListener('materialvideoended', function () {
       quizContainer.style.display = 'flex';
     });
 
     function submitAnswer(selectedAnswer) {
-      // クイズ回答処理
       var correctAnswer = 'A'; // 正解の答え
+      resultMessageEl.style.display = 'block'; // 結果メッセージを表示
       if (selectedAnswer === correctAnswer) {
         resultMessageEl.textContent = '正解！';
-        resultMessageEl.style.display = 'block';
         setTimeout(function() {
           window.location.href = 'quiz2.html'; // 次のクイズへ
         }, 2000); // 2秒後に遷移
       } else {
         resultMessageEl.textContent = '不正解...';
-        resultMessageEl.style.display = 'block';
         setTimeout(function() {
-          videoEl.play(); // 動画を再再生
+          resultMessageEl.style.display = 'none'; // 結果メッセージを非表示
+          videoEl.currentTime = 0; // 動画を最初から再再生
+          videoEl.play();
         }, 2000); // 2秒後に再再生
       }
     }
