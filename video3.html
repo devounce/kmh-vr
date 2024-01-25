@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>動画3</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+</head>
+<body>
+  <a-scene vr-mode-ui="enabled: true">
+    <a-assets>
+      <video id="vid3" autoplay src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-5.8-7.3.mp4" crossorigin="anonymous"></video>
+    </a-assets>
+    <a-videosphere src="#vid3"></a-videosphere>
+  </a-scene>
+
+  <script>
+    var video1 = document.querySelector('#vid3');
+
+    video1.addEventListener('ended', function() {
+      window.location.href = 'quiz3.html';
+    });
+  </script>
+</body>
+</html>
