@@ -4,33 +4,45 @@
   <title>クイズ1</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <style>
+    /* 既存のスタイルは維持したまま以下を追加 */
+    .feedback-image {
+      width: 200px;
+      height: 200px;
+      display: none; /* 初期状態では画像を表示しない */
+      position: absolute; /* 絶対位置指定で右側に配置 */
+      right: -220px; /* 右側の余白を設定 */
+      top: 50%; /* 上部から50%の位置に */
+      transform: translateY(-50%); /* Y軸方向の中央揃えに */
+    }
+  </style>
 </head>
 <body>
-  <div id="quiz-container">
+  <div id="quiz-container" style="position: relative;"> <!-- 相対位置指定に変更 -->
     <h1>クイズ1</h1>
     <p>アトロピンを準備したが、何mg投与した？</p>
     <button onclick="submitAnswer('A')">A: アトロピン1mg</button>
     <button onclick="submitAnswer('B')">B: アトロピン2mg</button>
     <button onclick="submitAnswer('C')">C: アトロピン3mg</button>
-    <img id="feedback-image" src="" style="display: none; width: 100%; margin-top: 20px;" />
+    <img id="feedback-image" class="feedback-image" src="" />
   </div>
 
   <script>
     function submitAnswer(answer) {
       var feedbackImage = document.getElementById('feedback-image');
-      feedbackImage.style.display = 'block';
+      feedbackImage.style.display = 'block'; // 画像を表示
 
       if (answer === 'A') {
-        feedbackImage.src = 'correct.png';
+        feedbackImage.src = 'correct.png'; // 正解画像のパス
         setTimeout(function() {
-          window.location.href = 'video2.html';
-        }, 3000);
+          window.location.href = 'video2.html'; // 正解の場合は次の動画へ
+        }, 3000); // 3秒後に移動
       } else {
-        feedbackImage.src = 'incorrect.png';
+        feedbackImage.src = 'incorrect.png'; // 不正解画像のパス
         setTimeout(function() {
-          feedbackImage.style.display = 'none';
-          window.location.href = 'video1.html';
-        }, 3000);
+          feedbackImage.style.display = 'none'; // 画像を非表示
+          window.location.href = 'video1.html'; // 不正解の場合は再再生
+        }, 3000); // 3秒後に移動
       }
     }
   </script>
