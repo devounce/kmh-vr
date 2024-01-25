@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>クイズ2</title>
+  <title>クイズ1</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 </head>
 <body>
-  <a-scene>
-    <a-videosphere src="https://devounce.io/projects/kmh-vr/videos/quiz_manual-3.25-5.8.mp4" id="videoSphere"></a-videosphere>
-  </a-scene>
+  <div id="quiz-container">
+    <h1>クイズ2</h1>
+    <p>胸骨圧迫の際、質の評価に該当しないものは？</p>
+    <button onclick="submitAnswer('A')">A: 胸骨圧迫の速さ</button>
+    <button onclick="submitAnswer('B')">B: 胸骨圧迫交代のタイミング</button>
+    <button onclick="submitAnswer('C')">C: 圧迫した胸骨を毎回元に戻す</button>
+    <img id="feedback-image" src="" style="display: none; max-width: 200px; max-height: 200px; margin-top: 20px; margin-left: auto; margin-right: auto;" />
+  </div>
 
   <script>
-    document.querySelector('#videoSphere').addEventListener('materialvideoended', function () {
-      document.body.innerHTML += `
-        <h1>クイズ2</h1>
-        <p>胸骨圧迫の際、質の評価に該当しないものは？</p>
-        <button onclick="submitAnswer('A')">A: 胸骨圧迫の速さ</button>
-        <button onclick="submitAnswer('B')">B: 胸骨圧迫交代のタイミング</button>
-        <button onclick="submitAnswer('C')">C: 圧迫した胸骨を毎回元に戻す</button>
-      `;
-    });
-    document.querySelector('#videoSphere').components.material.material.map.image.play();
-  </script>
+    function submitAnswer(answer) {
+      var feedbackImage = document.getElementById('feedback-image');
+      feedbackImage.style.display = 'block'; // Show the feedback image
 
-  <script src="quiz_logic.js"></script>
+      if (answer === 'B') {
+        feedbackImage.src = 'correct.png';
+        setTimeout(function() {
+          window.location.href = 'video3.html';
+        }, 3000);
+      } else {
+        feedbackImage.src = 'incorrect.png';
+        setTimeout(function() {
+          feedbackImage.style.display = 'none'; // Hide the feedback image
+          window.location.href = 'video2.html';
+        }, 3000);
+      }
+    }
+  </script>
 </body>
 </html>
