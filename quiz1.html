@@ -12,14 +12,25 @@
     <button onclick="submitAnswer('A')">A: アトロピン1mg</button>
     <button onclick="submitAnswer('B')">B: アトロピン2mg</button>
     <button onclick="submitAnswer('C')">C: アトロピン3mg</button>
+    <img id="feedback-image" src="" style="display: none; width: 100%; margin-top: 20px;" />
   </div>
 
   <script>
     function submitAnswer(answer) {
+      var feedbackImage = document.getElementById('feedback-image');
+      feedbackImage.style.display = 'block';
+
       if (answer === 'A') {
-        window.location.href = 'video2.html'; // 正解の場合は次の動画へ
+        feedbackImage.src = 'correct.png';
+        setTimeout(function() {
+          window.location.href = 'video2.html';
+        }, 3000);
       } else {
-        window.location.href = 'video1.html'; // 不正解の場合は動画を再再生
+        feedbackImage.src = 'incorrect.png';
+        setTimeout(function() {
+          feedbackImage.style.display = 'none';
+          window.location.href = 'video1.html';
+        }, 3000);
       }
     }
   </script>
