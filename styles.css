@@ -19,6 +19,18 @@ body {
   width: 100%;
 }
 
+#quiz-container button {
+  display: block; /* ボタンをブロック要素として表示 */
+  width: 100%; /* ボタンの幅をコンテナの幅に合わせる */
+  box-sizing: border-box; /* パディングを幅に含める */
+  margin-bottom: 20px; /* ボタンの間に余白を追加 */
+}
+
+/* 最後のボタンの余白を取り除く */
+#quiz-container button:last-child {
+  margin-bottom: 0;
+}
+
 h1 {
   font-size: 36px;
   color: #333;
